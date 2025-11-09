@@ -1,0 +1,8 @@
+.claude/
+*.log
+*.tmp
+*~
+.DS_Store
+
+# Sudo configuration scripts (security sensitive)
+setup-sudo.sh
