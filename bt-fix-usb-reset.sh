@@ -21,15 +21,24 @@ fi
 
 echo -e "${YELLOW}Step 1: Disable USB autosuspend for Bluetooth device${NC}"
 echo "-------------------"
-# Find the USB device path
-USB_DEVICE=$(find /sys/bus/usb/devices/ -name "*" | grep -E "/[0-9]+-[0-9]+$" -type l 2>/dev/null | head -1)
-if [ -n "$USB_DEVICE" ]; then
-    echo "Found Bluetooth USB device at: $USB_DEVICE"
-    sudo sh -c "echo on > $USB_DEVICE/power/control"
-    echo "USB autosuspend disabled"
-    cat $USB_DEVICE/power/control
-else
-    echo -e "${YELLOW}Could not find USB device 1-8, continuing anyway...${NC}"
+# Find the USB device path for Apple Bluetooth (05ac:8290)
+# Note: USB device number (e.g., 1-8) varies by system - we search for it dynamically
+for usbdev in /sys/bus/usb/devices/*; do
+    if [ -f "$usbdev/idVendor" ] && [ -f "$usbdev/idProduct" ]; then
+        vendor=$(cat "$usbdev/idVendor")
+        product=$(cat "$usbdev/idProduct")
+        if [ "$vendor" = "05ac" ] && [ "$product" = "8290" ]; then
+            USB_DEVICE="$usbdev"
+            echo "Found Bluetooth USB device at: $USB_DEVICE"
+            sudo sh -c "echo on > $USB_DEVICE/power/control"
+            echo "USB autosuspend disabled"
+            cat $USB_DEVICE/power/control
+            break
+        fi
+    fi
+done
+if [ -z "$USB_DEVICE" ]; then
+    echo -e "${YELLOW}Could not find USB device 05ac:8290, continuing anyway...${NC}"
 fi
 echo ""
 

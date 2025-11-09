@@ -87,6 +87,9 @@ systemctl --user status pipewire wireplumber
 
 Remove old pairing (using Blueman GUI or bluetoothctl):
 ```bash
+# First find your headset MAC address
+bluetoothctl devices
+# Then remove it (replace XX:XX:XX:XX:XX:XX with your actual MAC)
 bluetoothctl remove XX:XX:XX:XX:XX:XX
 ```
 
@@ -98,7 +101,8 @@ Put headset in pairing mode:
 Pair and trust:
 ```bash
 bluetoothctl scan on
-# Wait for device to appear
+# Wait for device to appear, note the MAC address
+# Replace XX:XX:XX:XX:XX:XX with your headset's MAC address
 bluetoothctl pair XX:XX:XX:XX:XX:XX
 bluetoothctl trust XX:XX:XX:XX:XX:XX
 ```
@@ -114,6 +118,7 @@ If connection still fails:
 4. Attempt connection
 
 ```bash
+# Replace with your headset's MAC address
 bluetoothctl connect XX:XX:XX:XX:XX:XX
 ```
 
@@ -123,6 +128,7 @@ bluetoothctl connect XX:XX:XX:XX:XX:XX
 
 Check connection status:
 ```bash
+# Replace XX:XX:XX:XX:XX:XX with your headset's MAC address
 bluetoothctl info XX:XX:XX:XX:XX:XX | grep -E "Connected|Battery"
 ```
 
@@ -134,7 +140,8 @@ Battery Percentage: 0x64 (100)
 
 Check audio profiles:
 ```bash
-pactl list cards | grep -A 30 "bluez_card.70_BF_92_37_FA_CA"
+# Replace the underscored MAC with your headset's address
+pactl list cards | grep -A 30 "bluez_card.XX_XX_XX_XX_XX_XX"
 ```
 
 Expected active profile: `a2dp-sink` (High Fidelity Playback)
@@ -198,11 +205,11 @@ systemctl --user restart pipewire pipewire-pulse wireplumber
 
 **Solution**:
 ```bash
-# Check current profile
-pactl list cards | grep -A 5 "bluez_card.70_BF_92_37_FA_CA"
+# Check current profile (replace underscored MAC with your device)
+pactl list cards | grep -A 5 "bluez_card.XX_XX_XX_XX_XX_XX"
 
-# Switch to A2DP for music
-pactl set-card-profile bluez_card.70_BF_92_37_FA_CA a2dp-sink
+# Switch to A2DP for music (replace underscored MAC with your device)
+pactl set-card-profile bluez_card.XX_XX_XX_XX_XX_XX a2dp-sink
 
 # Or use pavucontrol GUI
 pavucontrol
@@ -274,7 +281,5 @@ journalctl -u bluetooth --since "5 minutes ago" --no-pager | grep -i jabra
 
 ## Device Info
 - **Model**: Jabra Elite 85h
-- **MAC Address**: XX:XX:XX:XX:XX:XX
-- **Bluetooth Version**: v0067p248Bd0106
 - **Supported Profiles**: A2DP, HFP/HSP, AVRCP
 - **Audio Codecs**: SBC, SBC-XQ, mSBC (for calls)

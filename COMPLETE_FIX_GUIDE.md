@@ -259,6 +259,9 @@ Should NOT see: "could not load mandatory module" errors
 
 Remove old corrupted pairing:
 ```bash
+# First find your headset MAC address
+bluetoothctl devices
+# Then remove it (replace XX:XX:XX:XX:XX:XX with your actual MAC)
 bluetoothctl remove XX:XX:XX:XX:XX:XX
 ```
 
@@ -270,7 +273,8 @@ Put headset in pairing mode:
 Pair using GUI (Blueman) or command line:
 ```bash
 bluetoothctl scan on
-# Wait for device to appear
+# Wait for device to appear, note the MAC address
+# Replace XX:XX:XX:XX:XX:XX with your headset's MAC address
 bluetoothctl pair XX:XX:XX:XX:XX:XX
 bluetoothctl trust XX:XX:XX:XX:XX:XX
 ```
@@ -285,6 +289,7 @@ If connection still fails after pairing:
 3. Turn ON headset
 4. Attempt connection:
    ```bash
+   # Replace with your headset's MAC address
    bluetoothctl connect XX:XX:XX:XX:XX:XX
    ```
 
@@ -294,6 +299,7 @@ If connection still fails after pairing:
 
 Check connection status:
 ```bash
+# Replace XX:XX:XX:XX:XX:XX with your headset's MAC address
 bluetoothctl info XX:XX:XX:XX:XX:XX | grep -E "Connected|Battery"
 ```
 
@@ -305,7 +311,8 @@ Battery Percentage: 0x64 (100)
 
 Check audio profiles:
 ```bash
-pactl list cards | grep -A 30 "bluez_card.70_BF_92_37_FA_CA"
+# Replace the underscored MAC with your headset's address
+pactl list cards | grep -A 30 "bluez_card.XX_XX_XX_XX_XX_XX"
 ```
 
 Expected active profile: `a2dp-sink` (High Fidelity Playback)
@@ -372,7 +379,7 @@ journalctl --user -u wireplumber -f
 **Check what's using bluetooth:**
 ```bash
 bluetoothctl devices
-bluetoothctl info XX:XX:XX:XX:XX:XX  # Jabra
+bluetoothctl info XX:XX:XX:XX:XX:XX  # Replace with your device MAC
 ```
 
 ### Common Error Messages and Fixes
@@ -395,7 +402,7 @@ bluetoothctl info XX:XX:XX:XX:XX:XX  # Jabra
 - **Computer**: MacBook Pro 2015
 - **Bluetooth**: Apple Inc. Host Controller (05ac:8290)
 - **Chip**: Broadcom BCM20703A1
-- **Headset**: Jabra Elite 85h (XX:XX:XX:XX:XX:XX)
+- **Headset**: Jabra Elite 85h
 
 ### Software
 - **OS**: Linux Mint (based on Ubuntu)

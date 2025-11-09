@@ -213,6 +213,12 @@ If your Jabra Elite 85h (or similar bluetooth headset) is paired but keeps disco
 - `disconnect-jabra.sh` - Quick disconnect from Jabra Elite 85h
 - `monitor-jabra.sh` - Monitor connection stability
 
+**Configuration:** Before using these scripts, you need to set your headset's MAC address:
+1. Find your MAC address: `bluetoothctl devices`
+2. Either:
+   - Export as environment variable: `export JABRA_MAC='XX:XX:XX:XX:XX:XX'`
+   - Or edit each script and replace `XX:XX:XX:XX:XX:XX` with your actual MAC address
+
 **Common issues covered:**
 - PipeWire/WirePlumber configuration problems
 - A2DP audio profile failures
